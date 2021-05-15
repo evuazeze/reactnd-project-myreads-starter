@@ -27,6 +27,18 @@ class BooksApp extends Component {
             })
     }
 
+    onShelfChange = (shelf, book) => {
+        const outOfShelfBook = this.state.books
+            .find(b => b.id === book.id);
+        this.setState(currentState => ({
+            ...currentState,
+            books: [...currentState.books.filter(b => b.id !== book.id), {
+                ...outOfShelfBook,
+                shelf
+            }]
+        }))
+    }
+
     render() {
         const shelves = [
             {
@@ -53,8 +65,10 @@ class BooksApp extends Component {
                         <div className="list-books-content">
                             {shelves.map(shelf => (
                                 <Shelf
+                                    key={shelf.identifier}
                                     shelf={shelf}
-                                    books={this.state.books}/>
+                                    books={this.state.books}
+                                    onShelfChange={this.onShelfChange}/>
                             ))}
                         </div>
                         <div className="open-search">
