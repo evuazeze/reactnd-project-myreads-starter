@@ -10,17 +10,35 @@ class SearchPage extends Component {
     }
 
     updateQuery = query => {
+        const {books} = this.props;
+
         BooksAPI.search(query)
             .then(data => {
-                if (data) {
-                    this.setState(() => ({
-                        foundBooks: data
-                    }))
-                } else {
+                if (!Array.isArray(data)) {
                     this.setState(() => ({
                         foundBooks: []
                     }))
+
+                    return;
                 }
+
+                const unshelvedBooksReturned = data.filter((foundBook) => {
+                    return !books.some((book) => {
+                        return book.id === foundBook.id
+                    });
+                });
+
+                const shelvedButUnreflectedBooksReturned = data.filter((foundBook) => {
+                    return books.some((book) => {
+                        return book.id === foundBook.id
+                    });
+                });
+
+                const shelvedBooks = books.filter(book => shelvedButUnreflectedBooksReturned.some(sb => book.id === sb.id))
+
+                this.setState(() => ({
+                    foundBooks: [...unshelvedBooksReturned, ...shelvedBooks]
+                }))
             })
     }
 
@@ -29,7 +47,7 @@ class SearchPage extends Component {
     }
 
     render() {
-        const { foundBooks } = this.state
+        const {foundBooks} = this.state
         return (
             <div className="search-books">
                 <div className="search-books-bar">
@@ -47,7 +65,7 @@ class SearchPage extends Component {
                 </div>
                 <div className="search-books-results">
                     <ol className="books-grid">
-                        {foundBooks && (foundBooks.map(book => (
+                        {foundBooks && foundBooks.length !== 0 && (foundBooks.map(book => (
                             <Book
                                 key={book.id}
                                 book={book}
