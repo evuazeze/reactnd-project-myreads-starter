@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import * as BooksAPI from './BooksAPI';
 
 class Book extends Component {
@@ -43,6 +44,11 @@ class Book extends Component {
             </li>
         );
     }
+}
+
+Book.propTyes = {
+    book: PropTypes.object.isRequired,
+    onShelfChange: PropTypes.func.isRequired
 }
 
 export default Book;
