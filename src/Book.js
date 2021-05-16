@@ -1,9 +1,17 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import * as BooksAPI from './BooksAPI';
 
 class Book extends Component {
 
     changeShelf = event => {
-        this.props.onShelfChange(event.target.value, this.props.book);
+        const book = this.props.book;
+        const shelf = event.target.value;
+
+        BooksAPI.update(book, shelf)
+            .then(() => {
+                book.shelf = shelf;
+                this.props.onShelfChange(book);
+            })
     }
 
     render() {
@@ -19,7 +27,7 @@ class Book extends Component {
                             backgroundImage: `url(${book.imageLinks.thumbnail})`
                         }}></div>
                         <div className="book-shelf-changer">
-                            <select value={book.shelf} onChange={this.changeShelf}>
+                            <select value={book.shelf ? book.shelf : 'none'} onChange={this.changeShelf}>
                                 <option value="move" disabled>Move to...</option>
                                 <option value="currentlyReading">Currently Reading</option>
                                 <option value="wantToRead">Want to Read</option>
@@ -29,7 +37,8 @@ class Book extends Component {
                         </div>
                     </div>
                     <div className="book-title">{book.title}</div>
-                    {book.authors.map(author => (<div key={author} className="book-authors">{author}</div>))}
+                    {book.authors && book.authors.map(author => (
+                        <div key={author} className="book-authors">{author}</div>))}
                 </div>
             </li>
         );

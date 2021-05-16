@@ -3,8 +3,8 @@ import Book from './Book';
 
 class Shelf extends Component {
 
-    onShelfChange = (shelf, book) => {
-        this.props.onShelfChange(shelf, book);
+    onShelfChange = (book) => {
+        this.props.onShelfChange(book);
     }
 
     render() {

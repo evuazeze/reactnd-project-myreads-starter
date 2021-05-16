@@ -27,14 +27,11 @@ class BooksApp extends Component {
             })
     }
 
-    onShelfChange = (shelf, book) => {
-        const outOfShelfBook = this.state.books
-            .find(b => b.id === book.id);
+    onShelfChange = (book) => {
         this.setState(currentState => ({
             ...currentState,
             books: [...currentState.books.filter(b => b.id !== book.id), {
-                ...outOfShelfBook,
-                shelf
+                ...book
             }]
         }))
     }
@@ -78,12 +75,12 @@ class BooksApp extends Component {
                             </Link>
                         </div>
                     </div>
-                )} />
+                )}/>
                 <Route path='/search' render={() => (
-                    <SearchPage />
-                )} />
-
-
+                    <SearchPage onShelfChange={(book) => {
+                        this.onShelfChange(book);
+                    }}/>
+                )}/>
             </div>
         )
     }
