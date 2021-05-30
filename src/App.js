@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { Route, Link } from 'react-router-dom';
+import React, {Component} from 'react'
+import {Route, Link} from 'react-router-dom';
 import * as BooksAPI from './BooksAPI'
 import './App.css'
 import Shelf from './Shelf';
@@ -11,13 +11,11 @@ class BooksApp extends Component {
         books: []
     }
 
-    componentDidMount() {
-        BooksAPI.getAll()
-            .then(books => {
-                this.setState(() => ({
-                    books
-                }))
-            })
+    async componentDidMount() {
+        const books = await BooksAPI.getAll();
+        this.setState(() => ({
+            books
+        }))
     }
 
     onShelfChange = (book) => {
@@ -73,8 +71,8 @@ class BooksApp extends Component {
                     <SearchPage
                         books={this.state.books}
                         onShelfChange={(book) => {
-                        this.onShelfChange(book);
-                    }}/>
+                            this.onShelfChange(book);
+                        }}/>
                 )}/>
             </div>
         )
