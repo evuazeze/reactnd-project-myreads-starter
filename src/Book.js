@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import * as BooksAPI from './BooksAPI';
 
-class Book extends Component {
+class Book extends PureComponent {
 
     changeShelf = event => {
         const book = this.props.book;
